@@ -20,8 +20,14 @@ describe SignatureGenerator::Processor do
     expect(subject.transform signature_templates[:sig1]).to eq 'ERB rulez'
   end
 
+  context 'when some inputs are missing' do
 
+    let(:missing_vars) {signature_templates[:missing_vars]}
 
+    it 'should raise an error' do
+      expect {subject.transform missing_vars}.to raise_error NameError
+    end
+  end
 
 
 end
