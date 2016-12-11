@@ -20,27 +20,60 @@ module SignatureGenerator
     NAME = 'Sg'
     DESCRIPTION = 'Description of sg'
 
+    attr_reader :template_io, :output_io
+
     def initialize
       super(NAME, SignatureGenerator::VERSION, DESCRIPTION, 'sg')
     end
 
-    # def add_script_options
-    #   ## Create here your extra command-line options
-    #   ## Here under are examples using potentially gem config layer to display default option value...
-    #   ## Check Slop documentation for further info.
-    #   # config.add_command_line_section do |slop|
-    #     # slop.on :p, :port, "Specify port to bind to. Default #{config.executable_gem_layer[:port]}.", argument: true, as: Integer
-    #     # slop.on :b, :bind, "Specify address to bind to. Default #{config.executable_gem_layer[:bind]}.", argument: true, as: String
-    #   # end
-    # end
+    def add_script_options
+      ## Create here your extra command-line options
+      ## Here under are examples using potentially gem config layer to display default option value...
+      ## Check Slop documentation for further info.
+      config.add_command_line_section do |slop|
+        slop.on :f, :'template-file', 'Specify the signature template file. Default is STDIN.', argument: true, as: String
+        slop.on :o, :'output-file', 'Specify the output file for the signature. Default is STDOUT.', argument: true, as: String
+        slop.on :force, 'Force overwriting output file.', argument: false
+      end
+    end
 
-    # def do_process
-    #   # Your code here.
-    # end
+    def do_process
+      # Your code here.
+      content = template_io.read
+      logger.debug content
+      output_io.puts content
+    ensure
+      template_io.close
+      output_io.close
+    end
 
-    # def check_config
-    #   # Check the config and raise an exception if incorrect.
-    # end
+    def check_config
+      # Check the config and raise an exception if incorrect.
+      @template_io = case config[:'template-file']
+                       when NilClass
+                         logger.debug 'Template from STDIN'
+                         STDIN
+                       when String
+                         file = File.expand_path(config[:'template-file'])
+                         raise 'Invalid template file specified !' unless File.readable? file
+                         io = File.open file, 'r'
+                         logger.debug "Template from file '#{file}'"
+                         io
+                     end
+      @output_io = case config[:'output-file']
+                     when NilClass
+                       logger.debug 'Signature to STDOUT'
+                       STDOUT
+                     when String
+                       file = File.expand_path(config[:'output-file'])
+                       if File.exists? file
+                         raise 'Output file already exists ! Use --force' unless config[:force]
+                       end
+                       io = File.open file, 'w'
+                       logger.debug "Signature generated into file '#{file}'"
+                       io
+                   end
+    end
 
   end
 end
