@@ -14,6 +14,8 @@ describe SignatureGenerator::Processor do
     st
   end
 
+  let(:missing_vars) {signature_templates[:missing_vars]}
+
   subject { described_class.new }
 
   it 'should transform templates into signatures using ERB' do
@@ -21,8 +23,6 @@ describe SignatureGenerator::Processor do
   end
 
   context 'when some inputs are missing' do
-
-    let(:missing_vars) {signature_templates[:missing_vars]}
 
     it 'should raise a NameError' do
       expect {subject.transform missing_vars}.to raise_error NameError

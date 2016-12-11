@@ -4,6 +4,8 @@ module SignatureGenerator
 
   class Processor
 
+    include EasyAppHelper::Input
+
     attr_reader :results, :context
 
     def initialize(context={})
