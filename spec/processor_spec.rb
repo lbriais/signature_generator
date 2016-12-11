@@ -28,7 +28,7 @@ describe SignatureGenerator::Processor do
       expect {subject.transform missing_vars}.to raise_error NameError
     end
 
-    context 'when some context is provided' do
+    context 'when some correct context is provided' do
 
       let(:context) { {i_m_a_missing_variable: 'now with content'} }
 
@@ -36,6 +36,18 @@ describe SignatureGenerator::Processor do
 
       it 'should not raise a NameError' do
         expect {subject.transform missing_vars}.not_to raise_error
+      end
+
+    end
+
+    context 'when some incorrect context is provided' do
+
+      let(:context) { {useless_variable: 'some content'} }
+
+      subject { described_class.new context}
+
+      it 'should still raise a NameError' do
+        expect {subject.transform missing_vars}.to raise_error NameError
       end
 
     end
