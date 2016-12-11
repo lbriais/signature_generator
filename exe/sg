@@ -41,7 +41,8 @@ module SignatureGenerator
       # Your code here.
       content = template_io.read
       logger.debug content
-      output_io.puts content
+      processor = SignatureGenerator::Processor.new
+      output_io.puts processor.transform content
     ensure
       template_io.close
       output_io.close
