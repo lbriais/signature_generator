@@ -25,6 +25,7 @@ describe SignatureGenerator::Processor do
   context 'when some inputs are missing' do
 
     it 'should raise a NameError' do
+      expect(subject).to receive(:get_user_input).exactly(described_class::MAX_RETRY).times
       expect {subject.transform missing_vars}.to raise_error NameError
     end
 
@@ -47,6 +48,7 @@ describe SignatureGenerator::Processor do
       subject { described_class.new context}
 
       it 'should still raise a NameError' do
+        expect(subject).to receive(:get_user_input).exactly(described_class::MAX_RETRY).times
         expect {subject.transform missing_vars}.to raise_error NameError
       end
 
