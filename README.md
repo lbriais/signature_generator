@@ -49,9 +49,8 @@ Here is a real-life usage example:
 
     $ sg -f ./my_template.html.erb -o my_signature_file.html --force --var varname1=value1 --var varname2=value2 
 
-As this gem is using [easy_app_helper](https://github.com/lbriais/easy_app_helper), it means that anything you can provide
-on the command line can be actually provided by a config file. Read [easy_app_helper](https://github.com/lbriais/easy_app_helper) 
-documentation for further info.
+As this gem is using [easy_app_helper], it means that anything you can provide on the command line can 
+be actually provided by a config file. Read [easy_app_helper] documentation for further info.
 
 __Any variable value not provided by the command line or a config file will actually be requested interactively at run time.__
 
@@ -76,3 +75,4 @@ to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
+[easy_app_helper]: https://github.com/lbriais/easy_app_helper "easy_app_helper Gem'
