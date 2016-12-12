@@ -8,7 +8,7 @@ by providing a simple ERB-based templating mechanism to generate actual employee
 
 
 This gem provides the `sg` executable to generate signature file from template.
-Any variable used in the ERB template, can be provided at run-time either by:
+Any undefined variable used in the ERB template has to be provided at run-time either by:
 
 * Providing values on command line
 * Providing values in config file
