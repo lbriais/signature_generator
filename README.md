@@ -1,4 +1,8 @@
-# SignatureGenerator
+# Signature Generator
+
+[![Build Status](https://travis-ci.org/lbriais/signature_generator.svg)](https://travis-ci.org/lbriais/signature_generator)
+[![Gem Version](https://badge.fury.io/rb/signature_generator.svg)](http://badge.fury.io/rb/signature_generator)
+
 
 This gem provides the `sg` executable to generate signature files from templates.
 Variables used in the template, can be provided at run-time either by:
