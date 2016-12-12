@@ -9,6 +9,7 @@ require 'bundler/setup'
 require 'easy_app_helper'
 require 'easy_app_helper/scripts'
 require 'signature_generator'
+require 'html_minifier'
 
 module SignatureGenerator
   class SgMasterScript < EasyAppHelper::Scripts::Master
@@ -34,6 +35,7 @@ module SignatureGenerator
         slop.on :o, :'output-file', 'Specify the output file for the signature. Default is STDOUT.', argument: true, as: String
         slop.on :force, 'Force overwriting output file.', argument: false
         slop.on :var=, 'Define variables in the form name=value', argument: true, as: Array
+        slop.on :n, :'no-minify', 'Will not minify the resulting html signature. By default will do', argument: false
       end
     end
 
@@ -42,7 +44,15 @@ module SignatureGenerator
       content = template_io.read
       logger.debug content
       processor = SignatureGenerator::Processor.new context
-      output_io.puts processor.transform content
+      signature = processor.transform content
+      logger.debug signature
+      unless config[:'no-minify']
+        minifier = HtmlMinifier::Minifier.new collapseWhitespace: true, collapseInlineTagWhitespace: true
+        signature = minifier.minify signature
+        logger.debug 'Minifying resulting signature'
+        logger.debug signature
+      end
+      output_io.puts signature
     ensure
       template_io.close
       output_io.close
