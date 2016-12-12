@@ -45,6 +45,11 @@ Here is a real-life usage example:
 
     $ sg -f ./my_template.html.erb -o my_signature_file.html --force --var varname1=value1 --var varname2=value2 
 
+As this gem is using [easy_app_helper](https://github.com/lbriais/easy_app_helper), it means that anything you can provide
+on the command line can be provided by a config file. Read easy_app_helper documentation for further info.
+
+__Any variable value not provided by the command line or a config file will actually be requested at run time.__
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec #BUNDLE_SSL_CA_CERT: '/etc/ssl/certs/NanonetRootCA.pem'` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
