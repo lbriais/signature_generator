@@ -25,7 +25,6 @@ if ENV['RUN_TESTS_IN_DEBUG']
   EasyAppHelper::ManagedLogger = EasyAppHelper::Logger::Initializer.build_logger
 end
 
-EasyAppHelper.config.system_layer.load File.expand_path('../../etc/sg.conf', __FILE__)
 EasyAppHelper.config[:simulate] = true
 
 RSpec.configure do |config|
