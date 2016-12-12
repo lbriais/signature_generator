@@ -3,9 +3,12 @@
 [![Build Status](https://travis-ci.org/lbriais/signature_generator.svg)](https://travis-ci.org/lbriais/signature_generator)
 [![Gem Version](https://badge.fury.io/rb/signature_generator.svg)](http://badge.fury.io/rb/signature_generator)
 
+The goal of this Ruby Gem is to provide a simple script to manage company email staff signatures consistently
+by providing a simple ERB-based templating mechanism to generate actual employee signature. 
 
-This gem provides the `sg` executable to generate signature files from templates.
-Variables used in the template, can be provided at run-time either by:
+
+This gem provides the `sg` executable to generate signature file from template.
+Any variable used in the ERB template, can be provided at run-time either by:
 
 * Providing values on command line
 * Providing values in config file
