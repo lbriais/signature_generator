@@ -16,11 +16,10 @@ module SignatureGenerator
     # If you want to manage sub-commands a-la-git, include following
     # include EasyAppHelper::Scripts::SubCommandManager
 
-    # Inserted here, but you may probably have already defined this somewhere else...
     NAME = 'Sg'
     DESCRIPTION = 'Description of sg'
 
-    attr_reader :template_io, :output_io
+    attr_reader :template_io, :output_io, :context
 
     def initialize
       super(NAME, SignatureGenerator::VERSION, DESCRIPTION, 'sg')
@@ -34,6 +33,7 @@ module SignatureGenerator
         slop.on :f, :'template-file', 'Specify the signature template file. Default is STDIN.', argument: true, as: String
         slop.on :o, :'output-file', 'Specify the output file for the signature. Default is STDOUT.', argument: true, as: String
         slop.on :force, 'Force overwriting output file.', argument: false
+        slop.on :var=, 'Define variables in the form name=value', argument: true, as: Array
       end
     end
 
@@ -41,7 +41,7 @@ module SignatureGenerator
       # Your code here.
       content = template_io.read
       logger.debug content
-      processor = SignatureGenerator::Processor.new
+      processor = SignatureGenerator::Processor.new context
       output_io.puts processor.transform content
     ensure
       template_io.close
@@ -50,13 +50,25 @@ module SignatureGenerator
 
     def check_config
       # Check the config and raise an exception if incorrect.
+      config[:var] ||=[]
+      @context = {}
+      config[:var].each do |definition|
+        valid = false
+        definition.match(/^\s*(?<var_name>[a-z][a-z0-9_]*)\s*=\s*(?<var_value>.+)\s*$/) do |md|
+          logger.warning "Overwriting existing variable '#{md['var_name']}' !" if context[md['var_name']]
+          context[md['var_name'].to_sym] = md['var_value']
+          valid = true
+        end
+        raise SignatureGenerator::Error, 'Invalid property specified !' unless valid
+      end
+
       @template_io = case config[:'template-file']
                        when NilClass
                          logger.debug 'Template from STDIN'
                          STDIN
                        when String
                          file = File.expand_path(config[:'template-file'])
-                         raise 'Invalid template file specified !' unless File.readable? file
+                         raise SignatureGenerator::Error, 'Invalid template file specified !' unless File.readable? file
                          io = File.open file, 'r'
                          logger.debug "Template from file '#{file}'"
                          io
@@ -68,7 +80,7 @@ module SignatureGenerator
                      when String
                        file = File.expand_path(config[:'output-file'])
                        if File.exists? file
-                         raise 'Output file already exists ! Use --force' unless config[:force]
+                         raise SignatureGenerator::Error, 'Output file already exists ! Use --force' unless config[:force]
                        end
                        io = File.open file, 'w'
                        logger.debug "Signature generated into file '#{file}'"

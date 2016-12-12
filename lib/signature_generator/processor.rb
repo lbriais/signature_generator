@@ -28,7 +28,7 @@ module SignatureGenerator
           logger.error 'Maximum retry number exceeded. Aborting !'
           raise e
         end
-        user_input = get_user_input "Please enter #{missing_var}"
+        user_input = get_user_input "Please enter value for '#{missing_var}' > "
         context[missing_var] = user_input unless user_input.nil? or user_input.empty?
         retry
       end
