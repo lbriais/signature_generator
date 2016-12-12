@@ -1,8 +1,11 @@
 # SignatureGenerator
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/signature_generator`. To experiment with that code, run `bin/console` for an interactive prompt.
+This gem provides the `sg` executable to generate signature files from templates.
+Variables used in the template, can be provided at run-time either by:
 
-TODO: Delete this and the text above, and describe your gem
+* Providing values on command line
+* Providing values in config file
+* Interactively
 
 ## Installation
 
@@ -22,7 +25,25 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+By default, the template is taken from STDIN and the result is produced on STDOUT. Of course both template and
+result files can be specified on command line (see `sg --help` to see all options).
+
+### Template
+
+The template is actually an [ERB](http://www.stuartellis.name/articles/erb/) template.
+
+### Resulting file
+
+By default the result is _minified_ using the [kangax minifier](https://github.com/kangax/html-minifier/). You can disable
+this behaviour by specifying `--no-minify` on the command line.
+
+### Substituting variables
+
+You can specify variables on the command line using the following syntax: `--var varname1=value1 --var varname2=value2 ...`
+
+Here is a real-life usage example:
+
+    $ sg -f ./my_template.html.erb -o my_signature_file.html --force --var varname1=value1 --var varname2=value2 
 
 ## Development
 
@@ -32,7 +53,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/signature_generator. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/lbriais/signature_generator. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 
 ## License
