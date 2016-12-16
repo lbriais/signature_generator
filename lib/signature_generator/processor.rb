@@ -9,9 +9,11 @@ module SignatureGenerator
     MAX_RETRY = 3
 
     attr_reader :results, :context
+    attr_accessor :max_retry
 
-    def initialize(context={})
+    def initialize(context: {}, max_retry: MAX_RETRY)
       self.context = context
+      self.max_retry = max_retry
     end
 
     def transform(template, context = self.context)
@@ -24,7 +26,7 @@ module SignatureGenerator
         counters[missing_var] += 1
         debug_msg = "Variable not provided: #{missing_var} (attempt ##{counters[missing_var]})"
         logger.debug debug_msg
-        if counters[missing_var] > MAX_RETRY
+        if counters[missing_var] > max_retry
           logger.error 'Maximum retry number exceeded. Aborting !'
           raise e
         end
