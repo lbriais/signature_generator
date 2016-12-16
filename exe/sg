@@ -34,7 +34,9 @@ module SignatureGenerator
         slop.on :f, :'template-file', 'Specify the signature template file. Default is STDIN.', argument: true, as: String
         slop.on :o, :'output-file', 'Specify the output file for the signature. Default is STDOUT.', argument: true, as: String
         slop.on :force, 'Force overwriting output file.', argument: false
-        slop.on :'max-retry', "Number of times retrying is allowed when prompted for values. Default is #{SignatureGenerator::Processor::MAX_RETRY}.", argument: true, as: Integer
+        slop.on :'max-retry',
+                "Number of times retrying is allowed when prompted for values. Default is #{SignatureGenerator::Processor::MAX_RETRY}.",
+                argument: true, as: Integer
         slop.on :var=, 'Define variables in the form name=value', argument: true, as: Array
         slop.on :n, :'no-minify', 'Will not minify the resulting html signature. By default will do', argument: false
       end
@@ -62,6 +64,7 @@ module SignatureGenerator
     def check_config
       # Check the config and raise an exception if incorrect.
       config[:var] ||=[]
+      # Context setup
       @context = {}
       config[:var].each do |definition|
         valid = false
@@ -72,7 +75,7 @@ module SignatureGenerator
         end
         raise SignatureGenerator::Error, 'Invalid property specified !' unless valid
       end
-
+      # Input definition
       @template_io = case config[:'template-file']
                        when NilClass
                          logger.debug 'Template from STDIN'
@@ -84,6 +87,7 @@ module SignatureGenerator
                          logger.debug "Template from file '#{file}'"
                          io
                      end
+      # Output definition
       @output_io = case config[:'output-file']
                      when NilClass
                        logger.debug 'Signature to STDOUT'
