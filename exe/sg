@@ -46,7 +46,7 @@ module SignatureGenerator
       # Your code here.
       content = template_io.read
       logger.debug content
-      processor = SignatureGenerator::Processor.new context: context, max_retry: config['max-retry']
+      processor = SignatureGenerator::Processor.new context: context, max_retry: config[:'max-retry']
       signature = processor.transform content
       logger.debug signature
       unless config[:'no-minify']
@@ -64,6 +64,8 @@ module SignatureGenerator
     def check_config
       # Check the config and raise an exception if incorrect.
       config[:var] ||=[]
+      # Check max retry
+      config[:'max-retry'] ||= SignatureGenerator::Processor::MAX_RETRY
       # Context setup
       @context = {}
       config[:var].each do |definition|
