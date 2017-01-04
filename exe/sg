@@ -68,7 +68,7 @@ module SignatureGenerator
       @context = {}
       config[:var].each do |definition|
         valid = false
-        definition.match(/^\s*(?<var_name>[a-z][a-z0-9_]*)\s*=\s*(?<var_value>.+)\s*$/) do |md|
+        definition.match(/^\s*(?<var_name>[a-z][a-z0-9_]*[!\?]?)\s*=\s*(?<var_value>.+)\s*$/) do |md|
           logger.warning "Overwriting existing variable '#{md['var_name']}' !" if context[md['var_name']]
           context[md['var_name'].to_sym] = md['var_value']
           valid = true
