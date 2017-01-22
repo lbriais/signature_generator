@@ -39,12 +39,16 @@ module SignatureGenerator
                 argument: true, as: Integer
         slop.on :var=, 'Define variables in the form name=value', argument: true, as: Array
         slop.on :n, :'no-minify', 'Will not minify the resulting html signature. By default will do', argument: false
+        slop.on :'inline-images', 'Encodes remote images as Base64', argument: false
       end
     end
 
     def do_process
       # Your code here.
       content = template_io.read
+      if config[:'inline-images']
+
+      end
       logger.debug content
       processor = SignatureGenerator::Processor.new context: context, max_retry: config[:'max-retry']
       signature = processor.transform content
