@@ -39,6 +39,7 @@ module SignatureGenerator
                 argument: true, as: Integer
         slop.on :var=, 'Define variables in the form name=value', argument: true, as: Array
         slop.on :n, :'no-minify', 'Will not minify the resulting html signature. By default will do', argument: false
+        slop.on :'inline-images', 'Encodes remote images as Base64', argument: false
       end
     end
 

@@ -19,6 +19,9 @@ module SignatureGenerator
     def transform(template, context = self.context)
       counters = {}
       begin
+        if config[:'inline-images']
+          template = SignatureGenerator::Inliner.new(template).inlined
+        end
         @results = ERB.new(template, nil, '-').result(context_as_binding context)
       rescue NameError => e
         missing_var = e.name
