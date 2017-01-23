@@ -56,5 +56,14 @@ describe SignatureGenerator::Processor do
 
   end
 
+  context 'when some images are remote' do
+
+    it 'should replace them by their base64 encoding' do
+
+
+    end
+
+  end
+
 
 end

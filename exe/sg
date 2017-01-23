@@ -46,9 +46,6 @@ module SignatureGenerator
     def do_process
       # Your code here.
       content = template_io.read
-      if config[:'inline-images']
-
-      end
       logger.debug content
       processor = SignatureGenerator::Processor.new context: context, max_retry: config[:'max-retry']
       signature = processor.transform content
